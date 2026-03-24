@@ -1,0 +1,50 @@
+services:
+  db:
+    container_name: db-sales-tracker
+    image: postgres:18.1-alpine
+    env_file:
+      - .env
+    environment:
+      POSTGRES_HOST: ${PG_HOST}
+      POSTGRES_PORT: ${PG_PORT}
+      POSTGRES_DB: ${PG_DB}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${PG_USER} -d $${PG_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    
+  migrate:
+    container_name: migrate-sales-tracker
+    image: migrate/migrate
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    entrypoint: >
+      sh -c 'migrate -path ./migrations -database "$$PG_URL" up'
+    volumes:
+      - ./migrations:/migrations
+
+  sales-tracker:
+    container_name: sales-tracker-v1
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    ports:
+      - "8080:8080"
+
+volumes:
+  db_data:

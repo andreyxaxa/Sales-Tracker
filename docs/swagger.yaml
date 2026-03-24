@@ -1,0 +1,744 @@
+definitions:
+  request.CreateCategoryRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  request.CreateProductRequest:
+    properties:
+      base_price:
+        type: string
+      category_id:
+        type: integer
+      name:
+        type: string
+    required:
+    - base_price
+    - category_id
+    - name
+    type: object
+  request.CreateSaleRequest:
+    properties:
+      payment_method:
+        type: string
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      sold_at:
+        type: string
+      unit_price:
+        type: string
+    required:
+    - payment_method
+    - product_id
+    - quantity
+    - sold_at
+    - unit_price
+    type: object
+  request.UpdateProductPriceRequest:
+    properties:
+      new_price:
+        type: string
+    required:
+    - new_price
+    type: object
+  response.AnalyticsResponse:
+    properties:
+      group_label:
+        type: string
+      value:
+        type: number
+    type: object
+  response.CreateCategoryResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  response.CreateProductResponse:
+    properties:
+      base_price:
+        type: string
+      category_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  response.CreateSaleResponse:
+    properties:
+      id:
+        type: integer
+      payment_method:
+        type: string
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      sold_at:
+        type: string
+      unit_price:
+        type: string
+    type: object
+  response.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  response.GetCategoryResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  response.GetProductResponse:
+    properties:
+      base_price:
+        type: string
+      category_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  response.GetSaleResponse:
+    properties:
+      id:
+        type: integer
+      payment_method:
+        type: string
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      sold_at:
+        type: string
+      unit_price:
+        type: string
+    type: object
+  response.UpdateProductBasePriceResponse:
+    properties:
+      base_price:
+        type: string
+      category_id:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /v1/analytics/median:
+    get:
+      description: Returns the median(p50) for period
+      parameters:
+      - description: Start of range (from=2026-01-10T12:15:31+03:00)
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: End of range   (to=2026-03-22T19:07:13+03:00)
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: If you need a specific product
+        in: query
+        name: product-id
+        type: string
+      - description: If you need a specific category
+        in: query
+        name: category-id
+        type: string
+      - description: If you need a specific payment method
+        in: query
+        name: payment-method
+        type: string
+      - description: Grouping by different fields (group-by=day/month/week/category/product)
+        in: query
+        name: group-by
+        type: string
+      - description: Sorting by field (sort-by=group/value)
+        in: query
+        name: sort-by
+        type: string
+      - description: Sorting order (sort-order=asc/desc)
+        in: query
+        name: sort-order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.AnalyticsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get median
+      tags:
+      - analytics
+  /v1/analytics/p90:
+    get:
+      description: Returns the p90 for period
+      parameters:
+      - description: Start of range (from=2026-01-10T12:15:31+03:00)
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: End of range   (to=2026-03-22T19:07:13+03:00)
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: If you need a specific product
+        in: query
+        name: product-id
+        type: string
+      - description: If you need a specific category
+        in: query
+        name: category-id
+        type: string
+      - description: If you need a specific payment method
+        in: query
+        name: payment-method
+        type: string
+      - description: Grouping by different fields (group-by=day/month/week/category/product)
+        in: query
+        name: group-by
+        type: string
+      - description: Sorting by field (sort-by=group/value)
+        in: query
+        name: sort-by
+        type: string
+      - description: Sorting order (sort-order=asc/desc)
+        in: query
+        name: sort-order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.AnalyticsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get percentile 90
+      tags:
+      - analytics
+  /v1/analytics/revenue-avg:
+    get:
+      description: Returns the average revenue for period
+      parameters:
+      - description: Start of range (from=2026-01-10T12:15:31+03:00)
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: End of range   (to=2026-03-22T19:07:13+03:00)
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: If you need a specific product
+        in: query
+        name: product-id
+        type: string
+      - description: If you need a specific category
+        in: query
+        name: category-id
+        type: string
+      - description: If you need a specific payment method
+        in: query
+        name: payment-method
+        type: string
+      - description: Grouping by different fields (group-by=day/month/week/category/product)
+        in: query
+        name: group-by
+        type: string
+      - description: Sorting by field (sort-by=group/value)
+        in: query
+        name: sort-by
+        type: string
+      - description: Sorting order (sort-order=asc/desc)
+        in: query
+        name: sort-order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.AnalyticsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get revenue average
+      tags:
+      - analytics
+  /v1/analytics/revenue-sum:
+    get:
+      description: Returns the revenue sum for period
+      parameters:
+      - description: Start of range (from=2026-01-10T12:15:31+03:00)
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: End of range   (to=2026-03-22T19:07:13+03:00)
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: If you need a specific product
+        in: query
+        name: product-id
+        type: string
+      - description: If you need a specific category
+        in: query
+        name: category-id
+        type: string
+      - description: If you need a specific payment method
+        in: query
+        name: payment-method
+        type: string
+      - description: Grouping by different fields (group-by=day/month/week/category/product)
+        in: query
+        name: group-by
+        type: string
+      - description: Sorting by field (sort-by=group/value)
+        in: query
+        name: sort-by
+        type: string
+      - description: Sorting order (sort-order=asc/desc)
+        in: query
+        name: sort-order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.AnalyticsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get revenue sum
+      tags:
+      - analytics
+  /v1/analytics/sales-count:
+    get:
+      description: Returns the number of sales for period
+      parameters:
+      - description: Start of range (from=2026-01-10T12:15:31+03:00)
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: End of range   (to=2026-03-22T19:07:13+03:00)
+        in: query
+        name: to
+        required: true
+        type: string
+      - description: If you need a specific product
+        in: query
+        name: product-id
+        type: string
+      - description: If you need a specific category
+        in: query
+        name: category-id
+        type: string
+      - description: If you need a specific payment method
+        in: query
+        name: payment-method
+        type: string
+      - description: Grouping by different fields (group-by=day/month/week/category/product)
+        in: query
+        name: group-by
+        type: string
+      - description: Sorting by field (sort-by=group/value)
+        in: query
+        name: sort-by
+        type: string
+      - description: Sorting order (sort-order=asc/desc)
+        in: query
+        name: sort-order
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/response.AnalyticsResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get sales count
+      tags:
+      - analytics
+  /v1/category:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new category with name and description(optionally)
+      parameters:
+      - description: Name, description(opt.)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.CreateCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Create category
+      tags:
+      - category
+  /v1/category/{id}:
+    delete:
+      description: Deletes category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Error'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Delete
+      tags:
+      - category
+    get:
+      description: Returns category by ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.GetCategoryResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get category
+      tags:
+      - category
+  /v1/product:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new product with category id, name and base price
+      parameters:
+      - description: Category ID, Name, Base price
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateProductRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.CreateProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Create product
+      tags:
+      - product
+  /v1/product/{id}:
+    delete:
+      description: Deletes product by ID
+      parameters:
+      - description: Produt ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Delete product
+      tags:
+      - product
+    get:
+      description: Returns product by ID
+      parameters:
+      - description: Produt ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.GetProductResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get product
+      tags:
+      - product
+    patch:
+      consumes:
+      - application/json
+      description: Updates product's price
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: New price
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateProductPriceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.UpdateProductBasePriceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Update price of product
+      tags:
+      - product
+  /v1/sale:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new sale with product id, quantity, unit price, payment
+        method, and date of sale
+      parameters:
+      - description: Product ID, Quantity, Unit price, Payment method, Sold at
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateSaleRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/response.CreateSaleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Create sale
+      tags:
+      - sale
+  /v1/sale/{id}:
+    delete:
+      description: Deletes sale by ID
+      parameters:
+      - description: Sale ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Delete sale
+      tags:
+      - sale
+    get:
+      description: Returns sale by ID
+      parameters:
+      - description: Sale ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.GetSaleResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Error'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/response.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Error'
+      summary: Get sale
+      tags:
+      - sale
+swagger: "2.0"

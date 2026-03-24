@@ -1,0 +1,1125 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/v1/analytics/median": {
+            "get": {
+                "description": "Returns the median(p50) for period",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "analytics"
+                ],
+                "summary": "Get median",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start of range (from=2026-01-10T12:15:31+03:00)",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End of range   (to=2026-03-22T19:07:13+03:00)",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific product",
+                        "name": "product-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific category",
+                        "name": "category-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific payment method",
+                        "name": "payment-method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Grouping by different fields (group-by=day/month/week/category/product)",
+                        "name": "group-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting by field (sort-by=group/value)",
+                        "name": "sort-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting order (sort-order=asc/desc)",
+                        "name": "sort-order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.AnalyticsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/analytics/p90": {
+            "get": {
+                "description": "Returns the p90 for period",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "analytics"
+                ],
+                "summary": "Get percentile 90",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start of range (from=2026-01-10T12:15:31+03:00)",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End of range   (to=2026-03-22T19:07:13+03:00)",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific product",
+                        "name": "product-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific category",
+                        "name": "category-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific payment method",
+                        "name": "payment-method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Grouping by different fields (group-by=day/month/week/category/product)",
+                        "name": "group-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting by field (sort-by=group/value)",
+                        "name": "sort-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting order (sort-order=asc/desc)",
+                        "name": "sort-order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.AnalyticsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/analytics/revenue-avg": {
+            "get": {
+                "description": "Returns the average revenue for period",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "analytics"
+                ],
+                "summary": "Get revenue average",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start of range (from=2026-01-10T12:15:31+03:00)",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End of range   (to=2026-03-22T19:07:13+03:00)",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific product",
+                        "name": "product-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific category",
+                        "name": "category-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific payment method",
+                        "name": "payment-method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Grouping by different fields (group-by=day/month/week/category/product)",
+                        "name": "group-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting by field (sort-by=group/value)",
+                        "name": "sort-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting order (sort-order=asc/desc)",
+                        "name": "sort-order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.AnalyticsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/analytics/revenue-sum": {
+            "get": {
+                "description": "Returns the revenue sum for period",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "analytics"
+                ],
+                "summary": "Get revenue sum",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start of range (from=2026-01-10T12:15:31+03:00)",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End of range   (to=2026-03-22T19:07:13+03:00)",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific product",
+                        "name": "product-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific category",
+                        "name": "category-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific payment method",
+                        "name": "payment-method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Grouping by different fields (group-by=day/month/week/category/product)",
+                        "name": "group-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting by field (sort-by=group/value)",
+                        "name": "sort-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting order (sort-order=asc/desc)",
+                        "name": "sort-order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.AnalyticsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/analytics/sales-count": {
+            "get": {
+                "description": "Returns the number of sales for period",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "analytics"
+                ],
+                "summary": "Get sales count",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Start of range (from=2026-01-10T12:15:31+03:00)",
+                        "name": "from",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "End of range   (to=2026-03-22T19:07:13+03:00)",
+                        "name": "to",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific product",
+                        "name": "product-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific category",
+                        "name": "category-id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "If you need a specific payment method",
+                        "name": "payment-method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Grouping by different fields (group-by=day/month/week/category/product)",
+                        "name": "group-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting by field (sort-by=group/value)",
+                        "name": "sort-by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sorting order (sort-order=asc/desc)",
+                        "name": "sort-order",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/response.AnalyticsResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/category": {
+            "post": {
+                "description": "Creates a new category with name and description(optionally)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Create category",
+                "parameters": [
+                    {
+                        "description": "Name, description(opt.)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateCategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.CreateCategoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/category/{id}": {
+            "get": {
+                "description": "Returns category by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Get category",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.GetCategoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes category by ID",
+                "tags": [
+                    "category"
+                ],
+                "summary": "Delete",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/product": {
+            "post": {
+                "description": "Creates a new product with category id, name and base price",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Create product",
+                "parameters": [
+                    {
+                        "description": "Category ID, Name, Base price",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateProductRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.CreateProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/product/{id}": {
+            "get": {
+                "description": "Returns product by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Get product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Produt ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.GetProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes product by ID",
+                "tags": [
+                    "product"
+                ],
+                "summary": "Delete product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Produt ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Updates product's price",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Update price of product",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "New price",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateProductPriceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.UpdateProductBasePriceResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sale": {
+            "post": {
+                "description": "Creates a new sale with product id, quantity, unit price, payment method, and date of sale",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sale"
+                ],
+                "summary": "Create sale",
+                "parameters": [
+                    {
+                        "description": "Product ID, Quantity, Unit price, Payment method, Sold at",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateSaleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/response.CreateSaleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/sale/{id}": {
+            "get": {
+                "description": "Returns sale by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sale"
+                ],
+                "summary": "Get sale",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sale ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.GetSaleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes sale by ID",
+                "tags": [
+                    "sale"
+                ],
+                "summary": "Delete sale",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Sale ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "request.CreateCategoryRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreateProductRequest": {
+            "type": "object",
+            "required": [
+                "base_price",
+                "category_id",
+                "name"
+            ],
+            "properties": {
+                "base_price": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CreateSaleRequest": {
+            "type": "object",
+            "required": [
+                "payment_method",
+                "product_id",
+                "quantity",
+                "sold_at",
+                "unit_price"
+            ],
+            "properties": {
+                "payment_method": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "sold_at": {
+                    "type": "string"
+                },
+                "unit_price": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.UpdateProductPriceRequest": {
+            "type": "object",
+            "required": [
+                "new_price"
+            ],
+            "properties": {
+                "new_price": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.AnalyticsResponse": {
+            "type": "object",
+            "properties": {
+                "group_label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                }
+            }
+        },
+        "response.CreateCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CreateProductResponse": {
+            "type": "object",
+            "properties": {
+                "base_price": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CreateSaleResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "payment_method": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "sold_at": {
+                    "type": "string"
+                },
+                "unit_price": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.Error": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.GetCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.GetProductResponse": {
+            "type": "object",
+            "properties": {
+                "base_price": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.GetSaleResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "payment_method": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "integer"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "sold_at": {
+                    "type": "string"
+                },
+                "unit_price": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.UpdateProductBasePriceResponse": {
+            "type": "object",
+            "properties": {
+                "base_price": {
+                    "type": "string"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
