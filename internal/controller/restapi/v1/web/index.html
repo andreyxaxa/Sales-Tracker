@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #4ade80;
+    --accent2: #818cf8;
+    --accent3: #fb923c;
+    --danger: #f87171;
+    --text: #e2e8f0;
+    --text2: #94a3b8;
+    --text3: #475569;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* HEADER */
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--text3); }
+
+  nav {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .nav-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: all 0.15s;
+    border-radius: 4px;
+  }
+
+  .nav-btn:hover { color: var(--text); border-color: var(--text3); }
+  .nav-btn.active { color: var(--accent); border-color: var(--accent); background: rgba(74,222,128,0.07); }
+
+  /* LAYOUT */
+  main {
+    flex: 1;
+    display: flex;
+    gap: 0;
+  }
+
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    border-right: 1px solid var(--border);
+    padding: 24px 0;
+    background: var(--surface);
+  }
+
+  .sidebar-section {
+    margin-bottom: 8px;
+  }
+
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0 20px 8px;
+  }
+
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    font-size: 13px;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.12s;
+    border-left: 2px solid transparent;
+  }
+
+  .sidebar-item:hover { color: var(--text); background: var(--surface2); }
+  .sidebar-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(74,222,128,0.05); }
+
+  .sidebar-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .sidebar-item.active .sidebar-dot { background: var(--accent); }
+
+  /* CONTENT */
+  .content {
+    flex: 1;
+    padding: 32px;
+    overflow: auto;
+  }
+
+  /* PANELS */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .panel-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .panel-title {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .panel-subtitle {
+    font-size: 12px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  /* FORMS */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+  label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  input, select, textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 13px;
+    padding: 9px 12px;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent2);
+  }
+
+  select option { background: var(--surface2); }
+
+  /* BUTTONS */
+  .btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 9px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary { background: var(--accent); color: #0a0a0f; }
+  .btn-primary:hover { background: #22c55e; }
+  .btn-secondary { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .btn-secondary:hover { color: var(--text); border-color: var(--text3); }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+  .btn-danger:hover { background: rgba(248,113,113,0.1); }
+  .btn-sm { padding: 5px 12px; font-size: 11px; }
+
+  .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 14px;
+    color: var(--text3);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(42,42,58,0.5);
+    color: var(--text2);
+    vertical-align: middle;
+  }
+
+  tr:hover td { background: var(--surface2); }
+  tr:last-child td { border-bottom: none; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .tag-cash { background: rgba(74,222,128,0.1); color: var(--accent); }
+  .tag-card { background: rgba(129,140,248,0.1); color: var(--accent2); }
+  .tag-online { background: rgba(251,146,60,0.1); color: var(--accent3); }
+
+  /* RESPONSE BOX */
+  .response-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    min-height: 60px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    display: none;
+  }
+
+  .response-box.visible { display: block; }
+  .response-box.error { color: var(--danger); }
+
+  /* ANALYTICS */
+  .analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .analytics-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+
+  .metric-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+  }
+
+  .metric-card:hover { border-color: var(--accent2); }
+  .metric-card.selected { border-left-color: var(--accent); background: rgba(74,222,128,0.04); }
+
+  .metric-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-family: var(--mono);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .metric-endpoint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text3);
+    margin-top: 6px;
+  }
+
+  .results-table-wrap { margin-top: 20px; }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  /* EMPTY */
+  .empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--text3);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  /* STATUS */
+  .status-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 6px 32px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    display: flex;
+    gap: 24px;
+    z-index: 100;
+  }
+
+  .status-ok { color: var(--accent); }
+  .status-err { color: var(--danger); }
+
+  /* SPINNER */
+  .spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading { display: none; }
+  .loading.visible { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--text3); }
+
+  /* BAR CHART */
+  .bar-chart { margin-top: 16px; }
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+  .bar-label { width: 120px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; }
+  .bar-track { flex: 1; background: var(--surface2); border-radius: 2px; height: 18px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.5s ease; min-width: 2px; }
+  .bar-fill.avg { background: var(--accent2); }
+  .bar-fill.count { background: var(--accent3); }
+  .bar-fill.median { background: #e879f9; }
+  .bar-fill.p90 { background: #38bdf8; }
+  .bar-val { width: 90px; color: var(--text3); text-align: right; flex-shrink: 0; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--surface); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Sales<span>/</span>Tracker</div>
+  <nav>
+    <button class="nav-btn active" onclick="showSection('categories')">Categories</button>
+    <button class="nav-btn" onclick="showSection('products')">Products</button>
+    <button class="nav-btn" onclick="showSection('sales')">Sales</button>
+    <button class="nav-btn" onclick="showSection('analytics')">Analytics</button>
+  </nav>
+</header>
+
+<main>
+  <div class="sidebar">
+    <!-- Categories -->
+    <div class="sidebar-section" id="sidebar-categories">
+      <div class="sidebar-label">Categories</div>
+      <div class="sidebar-item active" onclick="showPanel('cat-create')"><div class="sidebar-dot"></div>Create</div>
+      <div class="sidebar-item" onclick="showPanel('cat-get')"><div class="sidebar-dot"></div>Get by ID</div>
+      <div class="sidebar-item" onclick="showPanel('cat-delete')"><div class="sidebar-dot"></div>Delete</div>
+    </div>
+
+    <!-- Products -->
+    <div class="sidebar-section" id="sidebar-products" style="display:none">
+      <div class="sidebar-label">Products</div>
+      <div class="sidebar-item active" onclick="showPanel('prd-create')"><div class="sidebar-dot"></div>Create</div>
+      <div class="sidebar-item" onclick="showPanel('prd-get')"><div class="sidebar-dot"></div>Get by ID</div>
+      <div class="sidebar-item" onclick="showPanel('prd-update')"><div class="sidebar-dot"></div>Update price</div>
+      <div class="sidebar-item" onclick="showPanel('prd-delete')"><div class="sidebar-dot"></div>Delete</div>
+    </div>
+
+    <!-- Sales -->
+    <div class="sidebar-section" id="sidebar-sales" style="display:none">
+      <div class="sidebar-label">Sales</div>
+      <div class="sidebar-item active" onclick="showPanel('sale-create')"><div class="sidebar-dot"></div>Create</div>
+      <div class="sidebar-item" onclick="showPanel('sale-get')"><div class="sidebar-dot"></div>Get by ID</div>
+      <div class="sidebar-item" onclick="showPanel('sale-delete')"><div class="sidebar-dot"></div>Delete</div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="sidebar-section" id="sidebar-analytics" style="display:none">
+      <div class="sidebar-label">Analytics</div>
+      <div class="sidebar-item active" onclick="showPanel('ana-query')"><div class="sidebar-dot"></div>Query</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ===================== CATEGORIES ===================== -->
+    <div id="panel-cat-create" class="panel active">
+      <div class="panel-header">
+        <div class="panel-title">Create Category</div>
+        <div class="panel-subtitle">POST /v1/category</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Request body</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" id="cat-create-name" placeholder="Electronics">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" id="cat-create-desc" placeholder="Optional description">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="catCreate()">Create</button>
+          <div class="loading" id="cat-create-loading"><div class="spinner"></div> Sending...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="cat-create-resp"></div>
+      </div>
+    </div>
+
+    <div id="panel-cat-get" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Get Category</div>
+        <div class="panel-subtitle">GET /v1/category/{id}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Parameters</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ID *</label>
+            <input type="number" id="cat-get-id" placeholder="1">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="catGet()">Fetch</button>
+          <div class="loading" id="cat-get-loading"><div class="spinner"></div> Loading...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="cat-get-resp"></div>
+      </div>
+    </div>
+
+    <div id="panel-cat-delete" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Delete Category</div>
+        <div class="panel-subtitle">DELETE /v1/category/{id}</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Parameters</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ID *</label>
+            <input type="number" id="cat-del-id" placeholder="1">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-danger" onclick="catDelete()">Delete</button>
+          <div class="loading" id="cat-del-loading"><div class="spinner"></div> Deleting...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="cat-del-resp"></div>
+      </div>
+    </div>
+
+    <!-- ===================== PRODUCTS ===================== -->
+    <div id="panel-prd-create" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Create Product</div>
+        <div class="panel-subtitle">POST /v1/product</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Request body</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Category ID *</label>
+            <input type="number" id="prd-create-cat" placeholder="1">
+          </div>
+          <div class="form-group">
+            <label>Name *</label>
+            <input type="text" id="prd-create-name" placeholder="iPhone 15">
+          </div>
+          <div class="form-group">
+            <label>Base price *</label>
+            <input type="text" id="prd-create-price" placeholder="999.99">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="prdCreate()">Create</button>
+          <div class="loading" id="prd-create-loading"><div class="spinner"></div> Sending...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="prd-create-resp"></div>
+      </div>
+    </div>
+
+    <div id="panel-prd-get" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Get Product</div>
+        <div class="panel-subtitle">GET /v1/product/{id}</div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ID *</label>
+            <input type="number" id="prd-get-id" placeholder="1">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="prdGet()">Fetch</button>
+          <div class="loading" id="prd-get-loading"><div class="spinner"></div> Loading...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="prd-get-resp"></div>
+      </div>
+    </div>
+
+    <div id="panel-prd-update" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Update Base Price</div>
+        <div class="panel-subtitle">PATCH /v1/product/{id}</div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Product ID *</label>
+            <input type="number" id="prd-upd-id" placeholder="1">
+          </div>
+          <div class="form-group">
+            <label>New price *</label>
+            <input type="text" id="prd-upd-price" placeholder="1099.99">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="prdUpdate()">Update</button>
+          <div class="loading" id="prd-upd-loading"><div class="spinner"></div> Saving...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="prd-upd-resp"></div>
+      </div>
+    </div>
+
+    <div id="panel-prd-delete" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Delete Product</div>
+        <div class="panel-subtitle">DELETE /v1/product/{id}</div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ID *</label>
+            <input type="number" id="prd-del-id" placeholder="1">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-danger" onclick="prdDelete()">Delete</button>
+          <div class="loading" id="prd-del-loading"><div class="spinner"></div> Deleting...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="prd-del-resp"></div>
+      </div>
+    </div>
+
+    <!-- ===================== SALES ===================== -->
+    <div id="panel-sale-create" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Create Sale</div>
+        <div class="panel-subtitle">POST /v1/sale</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Request body</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Product ID *</label>
+            <input type="number" id="sale-create-prd" placeholder="1">
+          </div>
+          <div class="form-group">
+            <label>Quantity *</label>
+            <input type="number" id="sale-create-qty" placeholder="2">
+          </div>
+          <div class="form-group">
+            <label>Unit price *</label>
+            <input type="text" id="sale-create-price" placeholder="499.99">
+          </div>
+          <div class="form-group">
+            <label>Payment method *</label>
+            <select id="sale-create-method">
+              <option value="cash">cash</option>
+              <option value="card">card</option>
+              <option value="online">online</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sold at *</label>
+            <input type="datetime-local" id="sale-create-date">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="saleCreate()">Create</button>
+          <div class="loading" id="sale-create-loading"><div class="spinner"></div> Sending...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="sale-create-resp"></div>
+      </div>
+    </div>
+
+    <div id="panel-sale-get" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Get Sale</div>
+        <div class="panel-subtitle">GET /v1/sale/{id}</div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ID *</label>
+            <input type="number" id="sale-get-id" placeholder="1">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="saleGet()">Fetch</button>
+          <div class="loading" id="sale-get-loading"><div class="spinner"></div> Loading...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="sale-get-resp"></div>
+      </div>
+    </div>
+
+    <div id="panel-sale-delete" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Delete Sale</div>
+        <div class="panel-subtitle">DELETE /v1/sale/{id}</div>
+      </div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>ID *</label>
+            <input type="number" id="sale-del-id" placeholder="1">
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-danger" onclick="saleDelete()">Delete</button>
+          <div class="loading" id="sale-del-loading"><div class="spinner"></div> Deleting...</div>
+        </div>
+        <hr class="divider">
+        <div class="card-title">Response</div>
+        <div class="response-box" id="sale-del-resp"></div>
+      </div>
+    </div>
+
+    <!-- ===================== ANALYTICS ===================== -->
+    <div id="panel-ana-query" class="panel">
+      <div class="panel-header">
+        <div class="panel-title">Analytics</div>
+        <div class="panel-subtitle">GET /v1/analytics/...</div>
+      </div>
+
+      <!-- Metric selector -->
+      <div class="analytics-grid">
+        <div class="metric-card selected" onclick="selectMetric(this,'revenue-sum')" data-metric="revenue-sum">
+          <div class="metric-name">Revenue Sum</div>
+          <div class="metric-value" id="mv-revenue-sum">—</div>
+          <div class="metric-endpoint">/analytics/revenue-sum</div>
+        </div>
+        <div class="metric-card" onclick="selectMetric(this,'revenue-avg')" data-metric="revenue-avg">
+          <div class="metric-name">Avg Revenue</div>
+          <div class="metric-value" id="mv-revenue-avg">—</div>
+          <div class="metric-endpoint">/analytics/revenue-avg</div>
+        </div>
+        <div class="metric-card" onclick="selectMetric(this,'sales-count')" data-metric="sales-count">
+          <div class="metric-name">Sales Count</div>
+          <div class="metric-value" id="mv-sales-count">—</div>
+          <div class="metric-endpoint">/analytics/sales-count</div>
+        </div>
+        <div class="metric-card" onclick="selectMetric(this,'median')" data-metric="median">
+          <div class="metric-name">Median</div>
+          <div class="metric-value" id="mv-median">—</div>
+          <div class="metric-endpoint">/analytics/median</div>
+        </div>
+        <div class="metric-card" onclick="selectMetric(this,'p90')" data-metric="p90">
+          <div class="metric-name">P90</div>
+          <div class="metric-value" id="mv-p90">—</div>
+          <div class="metric-endpoint">/analytics/p90</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Filters</div>
+        <div class="analytics-filters">
+          <div class="form-group">
+            <label>From *</label>
+            <input type="datetime-local" id="ana-from">
+          </div>
+          <div class="form-group">
+            <label>To *</label>
+            <input type="datetime-local" id="ana-to">
+          </div>
+          <div class="form-group">
+            <label>Product ID</label>
+            <input type="number" id="ana-product-id" placeholder="optional">
+          </div>
+          <div class="form-group">
+            <label>Category ID</label>
+            <input type="number" id="ana-category-id" placeholder="optional">
+          </div>
+          <div class="form-group">
+            <label>Payment method</label>
+            <select id="ana-payment">
+              <option value="">— any —</option>
+              <option value="cash">cash</option>
+              <option value="card">card</option>
+              <option value="online">online</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Group by</label>
+            <select id="ana-group-by">
+              <option value="">— none —</option>
+              <option value="day">day</option>
+              <option value="week">week</option>
+              <option value="month">month</option>
+              <option value="category">category</option>
+              <option value="product">product</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sort by</label>
+            <select id="ana-sort-by">
+              <option value="">— none —</option>
+              <option value="group">group</option>
+              <option value="value">value</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Sort order</label>
+            <select id="ana-sort-order">
+              <option value="asc">asc</option>
+              <option value="desc">desc</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="anaFetch()">Run query</button>
+          <button class="btn btn-secondary" onclick="anaFetchAll()">Run all metrics</button>
+          <div class="loading" id="ana-loading"><div class="spinner"></div> Querying...</div>
+        </div>
+
+        <div class="results-table-wrap" id="ana-results" style="display:none">
+          <hr class="divider">
+          <div class="card-title" id="ana-results-title">Results</div>
+          <div class="bar-chart" id="ana-bar-chart"></div>
+          <br>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Group</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody id="ana-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<div class="status-bar">
+  <span id="status-text">Ready</span>
+  <span id="status-url" style="color:var(--text3)"></span>
+</div>
+
+<script>
+const BASE = 'http://localhost:8080/v1';
+let selectedMetric = 'revenue-sum';
+
+// ─── Navigation ─────────────────────────────────────────────────────────────
+function showSection(section) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+
+  const sidebars = ['sidebar-categories','sidebar-products','sidebar-sales','sidebar-analytics'];
+  sidebars.forEach(id => document.getElementById(id).style.display = 'none');
+  document.getElementById('sidebar-' + section).style.display = 'block';
+
+  const map = {
+    categories: ['cat-create','cat-get','cat-delete'],
+    products:   ['prd-create','prd-get','prd-update','prd-delete'],
+    sales:      ['sale-create','sale-get','sale-delete'],
+    analytics:  ['ana-query'],
+  };
+
+  // show first panel of section
+  const panels = map[section];
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + panels[0]).classList.add('active');
+
+  // reset sidebar active
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  const sidebarItems = document.querySelectorAll('#sidebar-' + section + ' .sidebar-item');
+  if (sidebarItems.length) sidebarItems[0].classList.add('active');
+}
+
+function showPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+  event.target.classList.add('active');
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+function setStatus(msg, ok = true) {
+  const el = document.getElementById('status-text');
+  el.textContent = msg;
+  el.className = ok ? 'status-ok' : 'status-err';
+}
+
+function setUrl(url) {
+  document.getElementById('status-url').textContent = url;
+}
+
+function showResp(id, data, isError = false) {
+  const el = document.getElementById(id);
+  el.classList.add('visible');
+  el.classList.toggle('error', isError);
+  el.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+}
+
+function loading(id, show) {
+  document.getElementById(id).classList.toggle('visible', show);
+}
+
+async function api(method, path, body) {
+  const url = BASE + path;
+  setUrl(method + ' ' + url);
+  const opts = {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(url, opts);
+  const text = await res.text();
+  let json;
+  try { json = JSON.parse(text); } catch { json = text; }
+  setStatus(method + ' ' + path + ' → ' + res.status, res.ok);
+  return { ok: res.ok, status: res.status, data: json };
+}
+
+function localToRFC3339(val) {
+  if (!val) return null;
+  const d = new Date(val);
+  return d.toISOString().replace('.000Z', 'Z');
+}
+
+// ─── Categories ──────────────────────────────────────────────────────────────
+async function catCreate() {
+  const name = document.getElementById('cat-create-name').value.trim();
+  const desc = document.getElementById('cat-create-desc').value.trim();
+  if (!name) return alert('Name is required');
+  const body = { name };
+  if (desc) body.description = desc;
+  loading('cat-create-loading', true);
+  const r = await api('POST', '/category', body);
+  loading('cat-create-loading', false);
+  showResp('cat-create-resp', r.data, !r.ok);
+}
+
+async function catGet() {
+  const id = document.getElementById('cat-get-id').value;
+  if (!id) return alert('ID is required');
+  loading('cat-get-loading', true);
+  const r = await api('GET', '/category/' + id);
+  loading('cat-get-loading', false);
+  showResp('cat-get-resp', r.data, !r.ok);
+}
+
+async function catDelete() {
+  const id = document.getElementById('cat-del-id').value;
+  if (!id) return alert('ID is required');
+  if (!confirm('Delete category ' + id + '?')) return;
+  loading('cat-del-loading', true);
+  const r = await api('DELETE', '/category/' + id);
+  loading('cat-del-loading', false);
+  showResp('cat-del-resp', r.status === 204 ? 'Deleted successfully' : r.data, !r.ok);
+}
+
+// ─── Products ────────────────────────────────────────────────────────────────
+async function prdCreate() {
+  const cat = document.getElementById('prd-create-cat').value;
+  const name = document.getElementById('prd-create-name').value.trim();
+  const price = document.getElementById('prd-create-price').value.trim();
+  if (!cat || !name || !price) return alert('All fields are required');
+  loading('prd-create-loading', true);
+  const r = await api('POST', '/product', { category_id: parseInt(cat), name, base_price: price });
+  loading('prd-create-loading', false);
+  showResp('prd-create-resp', r.data, !r.ok);
+}
+
+async function prdGet() {
+  const id = document.getElementById('prd-get-id').value;
+  if (!id) return alert('ID is required');
+  loading('prd-get-loading', true);
+  const r = await api('GET', '/product/' + id);
+  loading('prd-get-loading', false);
+  showResp('prd-get-resp', r.data, !r.ok);
+}
+
+async function prdUpdate() {
+  const id = document.getElementById('prd-upd-id').value;
+  const price = document.getElementById('prd-upd-price').value.trim();
+  if (!id || !price) return alert('All fields are required');
+  loading('prd-upd-loading', true);
+  const r = await api('PATCH', '/product/' + id, { new_price: price });
+  loading('prd-upd-loading', false);
+  showResp('prd-upd-resp', r.data, !r.ok);
+}
+
+async function prdDelete() {
+  const id = document.getElementById('prd-del-id').value;
+  if (!id) return alert('ID is required');
+  if (!confirm('Delete product ' + id + '?')) return;
+  loading('prd-del-loading', true);
+  const r = await api('DELETE', '/product/' + id);
+  loading('prd-del-loading', false);
+  showResp('prd-del-resp', r.status === 204 ? 'Deleted successfully' : r.data, !r.ok);
+}
+
+// ─── Sales ───────────────────────────────────────────────────────────────────
+async function saleCreate() {
+  const prd = document.getElementById('sale-create-prd').value;
+  const qty = document.getElementById('sale-create-qty').value;
+  const price = document.getElementById('sale-create-price').value.trim();
+  const method = document.getElementById('sale-create-method').value;
+  const dateVal = document.getElementById('sale-create-date').value;
+  if (!prd || !qty || !price || !dateVal) return alert('All fields are required');
+  const soldAt = localToRFC3339(dateVal);
+  loading('sale-create-loading', true);
+  const r = await api('POST', '/sale', {
+    product_id: parseInt(prd),
+    quantity: parseInt(qty),
+    unit_price: price,
+    payment_method: method,
+    sold_at: soldAt,
+  });
+  loading('sale-create-loading', false);
+  showResp('sale-create-resp', r.data, !r.ok);
+}
+
+async function saleGet() {
+  const id = document.getElementById('sale-get-id').value;
+  if (!id) return alert('ID is required');
+  loading('sale-get-loading', true);
+  const r = await api('GET', '/sale/' + id);
+  loading('sale-get-loading', false);
+  showResp('sale-get-resp', r.data, !r.ok);
+}
+
+async function saleDelete() {
+  const id = document.getElementById('sale-del-id').value;
+  if (!id) return alert('ID is required');
+  if (!confirm('Delete sale ' + id + '?')) return;
+  loading('sale-del-loading', true);
+  const r = await api('DELETE', '/sale/' + id);
+  loading('sale-del-loading', false);
+  showResp('sale-del-resp', r.status === 204 ? 'Deleted successfully' : r.data, !r.ok);
+}
+
+// ─── Analytics ───────────────────────────────────────────────────────────────
+function selectMetric(el, metric) {
+  document.querySelectorAll('.metric-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMetric = metric;
+}
+
+function buildAnalyticsURL(metric) {
+  const from = localToRFC3339(document.getElementById('ana-from').value);
+  const to = localToRFC3339(document.getElementById('ana-to').value);
+  if (!from || !to) { alert('From and To are required'); return null; }
+
+  const params = new URLSearchParams();
+  params.set('from', from);
+  params.set('to', to);
+
+  const pid = document.getElementById('ana-product-id').value;
+  const cid = document.getElementById('ana-category-id').value;
+  const pay = document.getElementById('ana-payment').value;
+  const gb  = document.getElementById('ana-group-by').value;
+  const sb  = document.getElementById('ana-sort-by').value;
+  const so  = document.getElementById('ana-sort-order').value;
+
+  if (pid) params.set('product-id', pid);
+  if (cid) params.set('category-id', cid);
+  if (pay) params.set('payment-method', pay);
+  if (gb)  params.set('group-by', gb);
+  if (sb)  params.set('sort-by', sb);
+  if (so)  params.set('sort-order', so);
+
+  return '/analytics/' + metric + '?' + params.toString();
+}
+
+const metricColorClass = {
+  'revenue-sum': '',
+  'revenue-avg': 'avg',
+  'sales-count': 'count',
+  'median': 'median',
+  'p90': 'p90',
+};
+
+function renderResults(metric, data) {
+  const wrap = document.getElementById('ana-results');
+  const tbody = document.getElementById('ana-table-body');
+  const title = document.getElementById('ana-results-title');
+  const chart = document.getElementById('ana-bar-chart');
+
+  wrap.style.display = 'block';
+  title.textContent = 'Results — ' + metric;
+  tbody.innerHTML = '';
+  chart.innerHTML = '';
+
+  if (!Array.isArray(data) || data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="2" class="empty">No data</td></tr>';
+    return;
+  }
+
+  // bar chart
+  const values = data.map(d => parseFloat(d.value) || 0);
+  const maxVal = Math.max(...values);
+  const colorClass = metricColorClass[metric] || '';
+
+  data.forEach(row => {
+    const val = parseFloat(row.value) || 0;
+    const pct = maxVal > 0 ? (val / maxVal * 100) : 0;
+    const barRow = document.createElement('div');
+    barRow.className = 'bar-row';
+    barRow.innerHTML = `
+      <div class="bar-label" title="${row.group_label}">${row.group_label}</div>
+      <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${pct}%"></div></div>
+      <div class="bar-val">${Number(row.value).toLocaleString('en', {maximumFractionDigits:2})}</div>
+    `;
+    chart.appendChild(barRow);
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${row.group_label}</td><td>${row.value}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+async function anaFetch() {
+  const url = buildAnalyticsURL(selectedMetric);
+  if (!url) return;
+  loading('ana-loading', true);
+  setUrl('GET ' + BASE + url);
+  try {
+    const res = await fetch(BASE + url);
+    const data = await res.json();
+    setStatus('GET ' + url + ' → ' + res.status, res.ok);
+    if (res.ok) {
+      renderResults(selectedMetric, data);
+      // update metric card value
+      if (Array.isArray(data) && data.length === 1) {
+        document.getElementById('mv-' + selectedMetric).textContent =
+          Number(data[0].value).toLocaleString('en', {maximumFractionDigits:2});
+      } else if (Array.isArray(data) && data.length > 1) {
+        document.getElementById('mv-' + selectedMetric).textContent = data.length + ' groups';
+      }
+    } else {
+      renderResults(selectedMetric, []);
+      setStatus('Error: ' + JSON.stringify(data), false);
+    }
+  } catch(e) {
+    setStatus('Network error: ' + e.message, false);
+  }
+  loading('ana-loading', false);
+}
+
+async function anaFetchAll() {
+  const metrics = ['revenue-sum','revenue-avg','sales-count','median','p90'];
+  loading('ana-loading', true);
+  for (const m of metrics) {
+    const url = buildAnalyticsURL(m);
+    if (!url) { loading('ana-loading', false); return; }
+    try {
+      const res = await fetch(BASE + url);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length === 1) {
+          document.getElementById('mv-' + m).textContent =
+            Number(data[0].value).toLocaleString('en', {maximumFractionDigits:2});
+        } else if (Array.isArray(data) && data.length > 1) {
+          document.getElementById('mv-' + m).textContent = data.length + ' groups';
+        }
+      }
+    } catch {}
+  }
+  // render selected metric
+  const url = buildAnalyticsURL(selectedMetric);
+  if (url) {
+    try {
+      const res = await fetch(BASE + url);
+      if (res.ok) {
+        const data = await res.json();
+        renderResults(selectedMetric, data);
+      }
+    } catch {}
+  }
+  setStatus('All metrics fetched', true);
+  loading('ana-loading', false);
+}
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+(function init() {
+  // set default dates: last 30 days
+  const now = new Date();
+  const month = new Date(now - 30 * 24 * 60 * 60 * 1000);
+  const fmt = d => d.toISOString().slice(0,16);
+  document.getElementById('ana-from').value = fmt(month);
+  document.getElementById('ana-to').value = fmt(now);
+
+  // default sold_at for sale form
+  document.getElementById('sale-create-date').value = fmt(now);
+})();
+</script>
+</body>
+</html>

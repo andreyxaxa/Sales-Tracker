@@ -30,6 +30,10 @@ func NewRoutes(
 	analyticsGroup := apiV1Group.Group("/analytics")
 
 	{
+		// UI
+		apiV1Group.Get("/", r.showUI)
+
+		// API
 		categoryGroup.Post("/", r.createCategory)
 		categoryGroup.Get("/:id", r.getCategoryByID)
 		categoryGroup.Delete("/:id", r.deleteCategoryByID)
