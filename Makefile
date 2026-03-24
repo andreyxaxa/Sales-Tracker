@@ -11,3 +11,7 @@ compose-down: ### Down docker compose
 deps: ### Deps tidy + verify
 	go mod tidy && go mod verify
 .PHONY: deps
+
+integration-test: ### Run integration-test
+	go clean -testcache && go test -v ./integration-test/...
+.PHONY: integration-test
